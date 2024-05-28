@@ -1,0 +1,10 @@
+1.mov	r0, r5         即move 把r5寄存器中的值复制到r0
+2.add	r2, r3, #31    即add r3加上立即数31存到r2
+3.sub	sp, sp, #36	;   sp-立即数36 存到sp
+4.push	{r4, r5, r6, r7, r8, r9, sl, fp, lr}  push即压栈，把以下寄存器值压入堆栈
+5.ldr	r1, [pc, #1248]  即load   pc地址+立即数1248地址数据存到r1 
+6.str	r1, [sp, #16]    即store  把r1值存到 sp+立即数16处 与ldr相反
+  这里解释下[]是为了取地址，arm架构中的内存地址到cpu移动只能由l/s来操作，
+7.bic	r3, r3, #8128	;  即bit clear  立即数8128一般为掩码，第一个参数为dest 即把r3与8128按位清0 然后存到r3
+8.cmp	r3, #0           即compare 比较r3值与立即数0 (实际是减法) 一般用于条件或循环控制，会根据结果设置CCR,即条件码寄存器
+9.movge	r2, r3         即mov greater or equal 只有r3值大于r2时 才会r3值移到r2
