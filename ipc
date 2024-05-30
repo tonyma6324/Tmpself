@@ -1,7 +1,12 @@
-chapter 1
+ chapter 1
 1.无名管道用于有亲缘关系的进程，一般指一个shell会话派生的进程
 2，namespase 可以认为是ipc可能名字的集合，是标识ipc对象的方式，特别在无亲缘的进程中时
 3，消息传递（管道，队列），同步（锁，条件变量，信号量），共享内存（有名匿名），过程调用
 chapter 2 
 1.posix ipc需要一个名字
-2，mq_open
+2，mq_open sem_open shm_open分别为消息队列，有名信号量，与共享内存的posix ipc创建ipc对象函数
+3，mq_open
+  一般原型为
+  #include <mqueue.h>
+  mqd_t mq_open(const char *name, int oflag, mode_t mode, struct mq_attr *attr);
+
