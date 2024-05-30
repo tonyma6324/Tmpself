@@ -9,4 +9,9 @@ chapter 2
   一般原型为
   #include <mqueue.h>
   mqd_t mq_open(const char *name, int oflag, mode_t mode, struct mq_attr *attr);
+  name 一般是ipc对象名
+  oflag 标志位，指定了打开消息队列的方式。比如 O_RDONLY 表示以只读方式打开，O_WRONLY 表示以只写方式打开，O_CREAT 表示如果消息队列不存在则创建等。
+  mode：指定消息队列权限。  
+  attr：指向消息队列属性的指针，这个参数可以为 NULL，表示使用默认的消息队列属性。如果不为 NULL，则会根据 attr 指向的结构体来设置消息队列的属性，比如消息的最大数量、每个消息的最大大小等。
+
 
