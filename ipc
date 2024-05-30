@@ -2,6 +2,7 @@
 1.无名管道用于有亲缘关系的进程，一般指一个shell会话派生的进程
 2，namespase 可以认为是ipc可能名字的集合，是标识ipc对象的方式，特别在无亲缘的进程中时
 3，消息传递（管道，队列），同步（锁，条件变量，信号量），共享内存（有名匿名），过程调用
+
 chapter 2 
 1.posix ipc需要一个名字
 2，mq_open sem_open shm_open分别为消息队列，有名信号量，与共享内存的posix ipc创建ipc对象函数
@@ -11,7 +12,11 @@ chapter 2
   mqd_t mq_open(const char *name, int oflag, mode_t mode, struct mq_attr *attr);
   name 一般是ipc对象名
   oflag 标志位，指定了打开消息队列的方式。比如 O_RDONLY 表示以只读方式打开，O_WRONLY 表示以只写方式打开，O_CREAT 表示如果消息队列不存在则创建等。
-  mode：指定消息队列权限。  
+  mode：指定消息队列权限 如666 777 。 
   attr：指向消息队列属性的指针，这个参数可以为 NULL，表示使用默认的消息队列属性。如果不为 NULL，则会根据 attr 指向的结构体来设置消息队列的属性，比如消息的最大数量、每个消息的最大大小等。
+4,sem_open ,shm_open具体用法后面会讲的，先了解目前posix ipc有这三种
+  目前我们可以发现，这三种ipc的方式，基本都是靠路径来标识
+  这也侧面说明了namespace的重要性，统一的路径名在移植中非常重要
 
-
+chapter 3
+1，
