@@ -106,6 +106,65 @@ code段：
 在我们调用一个函数的同时到底发生了什么
 我们可以反汇编一个函数来看看
 
+00000ed4 <__skb_try_recv_from_queue>:
+	if (unlikely(flags & MSG_PEEK && *off >= 0)) {
+     ed4:	e2122002 	ands	r2, r2, #2            //将r2寄存器的值与立即数2按位与 然后放回r2 可以发现这个就是 flags & MSG_PEEK 
+
+{
+     ed8:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+     edc:	e1a07003 	mov	r7, r3
+	int _off = 0;
+     ee0:	01a05002 	moveq	r5, r2
+	bool peek_at_off = false;
+     ee4:	01a03002 	moveq	r3, r2
+	if (unlikely(flags & MSG_PEEK && *off >= 0)) {
+     ee8:	0a000004 	beq	f00 <__skb_try_recv_from_queue+0x2c>
+     eec:	e5975000 	ldr	r5, [r7]
+     ef0:	e3550000 	cmp	r5, #0
+	int _off = 0;
+     ef4:	b3a05000 	movlt	r5, #0
+		peek_at_off = true;
+     ef8:	a3a03001 	movge	r3, #1
+	bool peek_at_off = false;
+     efc:	b1a03005 	movlt	r3, r5
+	*last = queue->prev;
+     f00:	e591c004 	ldr	ip, [r1, #4]
+     f04:	e59d001c 	ldr	r0, [sp, #28]
+     f08:	e580c000 	str	ip, [r0]
+	skb_queue_walk(queue, skb) {
+     f0c:	e5914000 	ldr	r4, [r1]
+     f10:	e1540001 	cmp	r4, r1
+     f14:	0a000040 	beq	101c <__skb_try_recv_from_queue+0x148>
+		if (flags & MSG_PEEK) {
+     f18:	e3520000 	cmp	r2, #0
+     f1c:	0a000033 	beq	ff0 <__skb_try_recv_from_queue+0x11c>
+			if (peek_at_off && _off >= skb->len &&
+     f20:	e3530000 	cmp	r3, #0
+     f24:	e5940060 	ldr	r0, [r4, #96]	; 0x60
+     f28:	0a000009 	beq	f54 <__skb_try_recv_from_queue+0x80>
+     f2c:	e1500005 	cmp	r0, r5
+..........
+
+    1004:	e5842000 	str	r2, [r4]
+	WRITE_ONCE(next->prev, prev);
+    1008:	e5813004 	str	r3, [r1, #4]
+	WRITE_ONCE(prev->next, next);
+    100c:	e5831000 	str	r1, [r3]
+		*off = _off;
+    1010:	e5875000 	str	r5, [r7]
+		return skb;
+    1014:	e1a00004 	mov	r0, r4
+    1018:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+	return NULL;
+    101c:	e3a00000 	mov	r0, #0
+}
+    1020:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+
+我们发现在函数刚开始调用的时候，先将所有的寄存器的值入栈，这在中断也叫保存现场
+在函数调用时，会生成一个栈帧，但这个栈帧的概念是我们人为创造的，实际上它不是一个立即的过程
+一般来说我们会将当前的sp的值保存到fp中，fp也就是当前栈帧的基址，然后将参数给入栈
+
+
 
 
 
